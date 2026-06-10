@@ -290,27 +290,17 @@
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-slate-50 transition-colors group';
             
-            let drColorClass = 'bg-slate-100 text-slate-700';
-            if (typeof data.dr === 'number') {
-                if (data.dr >= 70) {
-                    drColorClass = 'bg-green-100 text-green-800 font-bold';
-                } else if (data.dr >= 40) {
-                    drColorClass = 'bg-yellow-100 text-yellow-800 font-medium';
-                } else {
-                    drColorClass = 'bg-red-100 text-red-800';
-                }
-            } else if (data.dr === 'Err Proxy') {
-                drColorClass = 'bg-slate-200 text-red-800 font-medium';
+            let drDisplay = data.dr;
+            if (data.dr === 'Err Proxy') {
+                drDisplay = `<span class="text-red-600 font-medium">${data.dr}</span>`;
             }
 
             const badgeText = data.isSimulated ? `<span class="ml-2 inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-xs font-medium text-red-800 ring-1 ring-inset ring-red-600/20">Errore Proxy</span>` : '';
 
             tr.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 border-r border-slate-100">${data.domain} ${badgeText}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-slate-100 text-center" data-value="${data.dr}">
-                    <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full ${drColorClass}">
-                        ${data.dr}
-                    </span>
+                <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-slate-100 text-center text-slate-700 font-medium" data-value="${data.dr}">
+                    ${drDisplay}
                 </td>
             `;
 
