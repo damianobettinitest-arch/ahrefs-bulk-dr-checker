@@ -292,11 +292,15 @@
             
             let drColorClass = 'bg-slate-100 text-slate-700';
             if (typeof data.dr === 'number') {
-                if (data.dr > 75) drColorClass = 'bg-green-100 text-green-800 font-bold';
-                else if (data.dr > 50) drColorClass = 'bg-blue-100 text-blue-800 font-medium';
-                else if (data.dr > 25) drColorClass = 'bg-orange-100 text-orange-800';
+                if (data.dr >= 70) {
+                    drColorClass = 'bg-green-100 text-green-800 font-bold';
+                } else if (data.dr >= 40) {
+                    drColorClass = 'bg-yellow-100 text-yellow-800 font-medium';
+                } else {
+                    drColorClass = 'bg-red-100 text-red-800';
+                }
             } else if (data.dr === 'Err Proxy') {
-                drColorClass = 'bg-red-100 text-red-800 font-medium';
+                drColorClass = 'bg-slate-200 text-red-800 font-medium';
             }
 
             const badgeText = data.isSimulated ? `<span class="ml-2 inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-xs font-medium text-red-800 ring-1 ring-inset ring-red-600/20">Errore Proxy</span>` : '';
