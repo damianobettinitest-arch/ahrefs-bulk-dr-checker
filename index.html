@@ -30,57 +30,27 @@
         }
     </script>
     <style>
-        /* Custom scrollbar for textarea and table */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* Editable cell styles */
         td[contenteditable="true"]:hover {
-            background-color: #f8fafc;
-            cursor: text;
-            outline: 1px dashed #cbd5e1;
+            background-color: #f8fafc; cursor: text; outline: 1px dashed #cbd5e1;
         }
         td[contenteditable="true"]:focus {
-            background-color: #ffffff;
-            outline: 2px solid #146ae8;
-            outline-offset: -2px;
+            background-color: #ffffff; outline: 2px solid #146ae8; outline-offset: -2px;
         }
 
         .sort-icon {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-            margin-left: 4px;
-            opacity: 0.3;
-            transition: opacity 0.2s;
+            display: inline-block; width: 16px; height: 16px; vertical-align: middle; margin-left: 4px; opacity: 0.3; transition: opacity 0.2s;
         }
-        th:hover .sort-icon {
-            opacity: 0.7;
-        }
-        th.sorted-asc .sort-icon,
-        th.sorted-desc .sort-icon {
-            opacity: 1;
-            color: #146ae8;
-        }
+        th:hover .sort-icon { opacity: 0.7; }
+        th.sorted-asc .sort-icon, th.sorted-desc .sort-icon { opacity: 1; color: #146ae8; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -93,19 +63,16 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         
-        <!-- Info Section -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="md:col-span-2 space-y-4">
                 <h2 class="text-2xl font-bold text-slate-900">Analizza l'autorità di più domini contemporaneamente</h2>
                 <p class="text-slate-600 leading-relaxed">
-                    Incolla la tua lista di URL o domini nel box sottostante (uno per riga). Il sistema estrarrà automaticamente i domini puliti e interrogherà l'endpoint pubblico di Ahrefs per restituirti il <strong>Domain Rating (DR)</strong>, l'<strong>Ahrefs Rank (AR)</strong> e una stima dei domini referral.
+                    Incolla la tua lista di URL o domini nel box sottostante (uno per riga). Il sistema estrarrà automaticamente i domini puliti e interrogherà l'endpoint pubblico di Ahrefs per restituirti il <strong>Domain Rating (DR)</strong>.
                 </p>
             </div>
 
-            <!-- Glossary Card -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                 <h3 class="font-semibold text-slate-900 flex items-center gap-2 mb-3">
                     <i data-lucide="info" class="w-4 h-4 text-ahrefs-blue"></i> Legenda Metriche
@@ -116,14 +83,13 @@
                         <span class="text-slate-600 block mt-0.5">Mostra la forza del profilo backlink di un sito rispetto ad altri (scala 0-100).</span>
                     </li>
                     <li>
-                        <strong class="text-slate-800">AR (Ahrefs Rank):</strong> 
-                        <span class="text-slate-600 block mt-0.5">Classifica tutti i siti del database Ahrefs in base alla grandezza del loro profilo backlink.</span>
+                        <strong class="text-slate-800">Altre metriche:</strong> 
+                        <span class="text-slate-600 block mt-0.5">Non fornite dall'API pubblica gratuita (mostrate come N/A).</span>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <!-- Input Section -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 transition-all" id="inputSection">
             <label for="domainList" class="block text-sm font-medium text-slate-700 mb-2">Lista dei domini da analizzare (Max 100 consigliati)</label>
             <textarea 
@@ -141,7 +107,6 @@
                 </button>
             </div>
             
-            <!-- Progress Bar (Hidden initially) -->
             <div id="progressContainer" class="hidden mt-6">
                 <div class="flex justify-between text-sm mb-1 text-slate-600 font-medium">
                     <span>Analisi in corso...</span>
@@ -153,10 +118,8 @@
             </div>
         </div>
 
-        <!-- Results Section (Hidden initially) -->
         <div id="resultsSection" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex-col">
             
-            <!-- Toolbar -->
             <div class="bg-slate-50 border-b border-slate-200 p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-2 text-slate-700">
                     <i data-lucide="table" class="w-5 h-5 text-slate-500"></i>
@@ -177,7 +140,6 @@
                 </div>
             </div>
 
-            <!-- Table Wrapper -->
             <div class="overflow-x-auto">
                 <table id="resultsTable" class="min-w-full divide-y divide-slate-200 text-sm">
                     <thead class="bg-slate-50">
@@ -200,12 +162,10 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="bg-white divide-y divide-slate-200">
-                        <!-- Rows will be populated here -->
                     </tbody>
                 </table>
             </div>
             
-            <!-- Toast Notification -->
             <div id="toast" class="fixed bottom-4 right-4 bg-slate-800 text-white px-4 py-2 rounded-lg shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 flex items-center gap-2">
                 <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
                 <span id="toastMessage">Operazione completata!</span>
@@ -220,12 +180,9 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
 
-        // DOM Elements
         const textarea = document.getElementById('domainList');
         const countDisplay = document.getElementById('domainCount');
         const analyzeBtn = document.getElementById('analyzeBtn');
@@ -237,13 +194,11 @@
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
 
-        // Update count dynamically
         textarea.addEventListener('input', () => {
             const lines = textarea.value.split('\n').filter(line => line.trim() !== '');
             countDisplay.textContent = `${lines.length} domini rilevati`;
         });
 
-        // Main Analyze Function
         analyzeBtn.addEventListener('click', async () => {
             const rawText = textarea.value;
             if (!rawText.trim()) {
@@ -251,13 +206,11 @@
                 return;
             }
 
-            // Extract and clean domains
             let domains = rawText.split('\n')
                 .map(line => line.trim())
                 .filter(line => line !== '')
                 .map(cleanUrl);
 
-            // Remove duplicates
             domains = [...new Set(domains)];
 
             if (domains.length === 0) {
@@ -265,7 +218,6 @@
                 return;
             }
 
-            // UI Setup for loading
             analyzeBtn.disabled = true;
             analyzeBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Elaborazione...';
             lucide.createIcons();
@@ -276,7 +228,6 @@
             const total = domains.length;
             let processed = 0;
 
-            // Process sequentially to be gentle
             for (const domain of domains) {
                 const data = await fetchAhrefsData(domain);
                 addRowToTable(data);
@@ -284,11 +235,9 @@
                 processed++;
                 updateProgress(processed, total);
                 
-                // Small delay to prevent UI freezing and simulate realistic API pacing
-                await new Promise(r => setTimeout(r, 300)); 
+                await new Promise(r => setTimeout(r, 400)); // Delay per non bombardare il proxy
             }
 
-            // Cleanup UI after finish
             analyzeBtn.disabled = false;
             analyzeBtn.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i> Analizza Domini';
             lucide.createIcons();
@@ -298,117 +247,98 @@
             showToast("Analisi completata con successo!");
         });
 
-        // Function to clean URLs and get domain
         function cleanUrl(url) {
             try {
-                // Handle cases where URL lacks protocol but has paths
                 let withProtocol = url;
                 if (!url.startsWith('http://') && !url.startsWith('https://')) {
                     withProtocol = 'https://' + url;
                 }
                 const urlObj = new URL(withProtocol);
                 let hostname = urlObj.hostname;
-                // Remove www.
                 if (hostname.startsWith('www.')) {
                     hostname = hostname.substring(4);
                 }
                 return hostname;
             } catch (e) {
-                // Fallback for extremely malformed inputs
                 let domain = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
                 return domain;
             }
         }
 
-        // Mock/Fetch function for Ahrefs Free API
-        // NOTE: In a real scenario hitting the actual endpoint, we would use fetch().
-        // However, since cross-origin requests from browsers to standard APIs often fail without CORS headers,
-        // this function attempts a fetch but safely falls back to realistic generated data to ensure the tool is always usable.
         async function fetchAhrefsData(domain) {
+            // Utilizzo del proxy per aggirare il blocco CORS del browser
             const apiEndpoint = `https://corsproxy.io/?https://api.ahrefs.com/v3/public/domain-rating-free?target=${encodeURIComponent(domain)}`;
             
             try {
-                // We attempt to fetch, but intentionally timeout quickly for the preview environment
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 1000);
-                
-                const response = await fetch(apiEndpoint, { signal: controller.signal });
-                clearTimeout(timeoutId);
+                const response = await fetch(apiEndpoint);
                 
                 if (response.ok) {
                     const data = await response.json();
+                    
+                    // L'API gratuita restituisce i dati in un formato nidificato: { "domain_rating": { "domain_rating": 97 } }
+                    // Estraiamo il numero correttamente:
+                    let actualDr = 'Err';
+                    if (data && data.domain_rating) {
+                        if (data.domain_rating.domain_rating !== undefined) {
+                            actualDr = Math.round(data.domain_rating.domain_rating);
+                        } else if (typeof data.domain_rating === 'number') {
+                            actualDr = Math.round(data.domain_rating);
+                        }
+                    }
+
                     return {
                         domain: domain,
-                        dr: data.domain_rating || Math.floor(Math.random() * 100),
-                        ar: data.ahrefs_rank || Math.floor(Math.random() * 50000000),
-                        refdomains: data.referring_domains || Math.floor(Math.random() * 100000),
+                        dr: actualDr,
+                        ar: 'N/A', // Ahrefs non fornisce questa metrica nell'endpoint gratuito
+                        refdomains: 'N/A', // Ahrefs non fornisce questa metrica nell'endpoint gratuito
                         isSimulated: false
                     };
                 } else {
                     throw new Error('API returned non-200');
                 }
             } catch (error) {
-                // --- FALLBACK LOGIC ---
-                // Generates highly realistic, consistent mock data based on string hash
-                // This ensures the tool remains 100% usable for demonstration and testing
-                let hash = 0;
-                for (let i = 0; i < domain.length; i++) {
-                    hash = domain.charCodeAt(i) + ((hash << 5) - hash);
-                }
-                
-                // Famous domains get high DR
-                let dr = Math.abs(hash % 90) + 5; 
-                let ar = Math.abs((hash * 13) % 100000000);
-                let refdom = Math.abs((hash * 7) % 5000000);
-
-                if (domain.includes('google') || domain.includes('apple') || domain.includes('microsoft')) {
-                    dr = 90 + (Math.abs(hash) % 10);
-                    ar = Math.abs(hash % 100) + 1;
-                    refdom = 10000000 + Math.abs(hash % 50000000);
-                }
-
+                // Se il proxy fallisce, restituiamo un errore gestito
                 return {
                     domain: domain,
-                    dr: dr,
-                    ar: ar,
-                    refdomains: refdom,
+                    dr: 'Err Proxy',
+                    ar: '-',
+                    refdomains: '-',
                     isSimulated: true
                 };
             }
         }
 
-        // Add row to table with contenteditable cells
         function addRowToTable(data) {
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-slate-50 transition-colors group';
             
-            // Format numbers nicely
-            const formattedAr = new Intl.NumberFormat('it-IT').format(data.ar);
-            const formattedRef = new Intl.NumberFormat('it-IT').format(data.refdomains);
+            // Formattiamo le metriche gestendo correttamente i testi come 'N/A'
+            const formattedAr = typeof data.ar === 'number' ? new Intl.NumberFormat('it-IT').format(data.ar) : data.ar;
+            const formattedRef = typeof data.refdomains === 'number' ? new Intl.NumberFormat('it-IT').format(data.refdomains) : data.refdomains;
 
-            // DR Badge Color Logic
             let drColorClass = 'bg-slate-100 text-slate-700';
-            if (data.dr > 75) drColorClass = 'bg-green-100 text-green-800 font-bold';
-            else if (data.dr > 50) drColorClass = 'bg-blue-100 text-blue-800 font-medium';
-            else if (data.dr > 25) drColorClass = 'bg-orange-100 text-orange-800';
+            if (typeof data.dr === 'number') {
+                if (data.dr > 75) drColorClass = 'bg-green-100 text-green-800 font-bold';
+                else if (data.dr > 50) drColorClass = 'bg-blue-100 text-blue-800 font-medium';
+                else if (data.dr > 25) drColorClass = 'bg-orange-100 text-orange-800';
+            } else if (data.dr === 'Err Proxy') {
+                drColorClass = 'bg-red-100 text-red-800 font-medium';
+            }
 
-            const simulatedBadge = data.isSimulated 
-                ? `<span class="ml-2 inline-flex items-center rounded bg-yellow-50 px-1.5 py-0.5 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20" title="Dati simulati a causa del blocco CORS del browser" contenteditable="false">Simulato</span>` 
-                : '';
+            const badgeText = data.isSimulated ? `<span class="ml-2 inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-xs font-medium text-red-800 ring-1 ring-inset ring-red-600/20" contenteditable="false">Errore Proxy</span>` : '';
 
             tr.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 border-r border-slate-100" contenteditable="true">${data.domain} ${simulatedBadge}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 border-r border-slate-100" contenteditable="true">${data.domain} ${badgeText}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-slate-100 text-center" contenteditable="true" data-value="${data.dr}">
                     <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full ${drColorClass}">
                         ${data.dr}
                     </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 border-r border-slate-100 text-right" contenteditable="true" data-value="${data.ar}">${formattedAr}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 border-r border-slate-100 text-right" contenteditable="true" data-value="${data.refdomains}">${formattedRef}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 border-r border-slate-100 text-right" contenteditable="true" data-value="${typeof data.ar === 'number' ? data.ar : -1}">${formattedAr}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 border-r border-slate-100 text-right" contenteditable="true" data-value="${typeof data.refdomains === 'number' ? data.refdomains : -1}">${formattedRef}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400 italic" contenteditable="true">Clicca per aggiungere note...</td>
             `;
             
-            // Clean placeholder text on focus for the notes cell
             const notesCell = tr.lastElementChild;
             notesCell.addEventListener('focus', function() {
                 if(this.textContent.trim() === 'Clicca per aggiungere note...') {
@@ -425,10 +355,8 @@
                 }
             });
 
-            // Update underlying data-value on edit to keep sorting accurate
             tr.querySelectorAll('td[contenteditable="true"]').forEach(cell => {
                 cell.addEventListener('input', function() {
-                    // Try to clean formatting to get naked number if possible
                     let rawVal = this.textContent.replace(/\./g, '').trim();
                     if(!isNaN(rawVal) && rawVal !== '') {
                         this.setAttribute('data-value', rawVal);
@@ -441,14 +369,12 @@
             tableBody.appendChild(tr);
         }
 
-        // Update Progress Bar
         function updateProgress(current, total) {
             const percentage = Math.round((current / total) * 100);
             progressBar.style.width = `${percentage}%`;
             progressText.textContent = `${current} / ${total} (${percentage}%)`;
         }
 
-        // Sorting functionality
         let sortDirection = {};
         function sortTable(columnIndex, type) {
             const table = document.getElementById("resultsTable");
@@ -456,12 +382,10 @@
             const rows = Array.from(tbody.querySelectorAll("tr"));
             const headers = table.querySelectorAll("th");
 
-            // Toggle direction
             let isAsc = sortDirection[columnIndex] === 'asc';
-            sortDirection = {}; // clear others
+            sortDirection = {}; 
             sortDirection[columnIndex] = isAsc ? 'desc' : 'asc';
 
-            // Update UI icons
             headers.forEach(th => {
                 th.classList.remove('sorted-asc', 'sorted-desc');
                 const icon = th.querySelector('.sort-icon');
@@ -472,12 +396,10 @@
             currentTh.querySelector('.sort-icon').setAttribute('data-lucide', isAsc ? 'arrow-down' : 'arrow-up');
             lucide.createIcons();
 
-            // Sort rows
             rows.sort((a, b) => {
                 const cellA = a.cells[columnIndex];
                 const cellB = b.cells[columnIndex];
                 
-                // Get value from data-value attribute if it exists, otherwise use text
                 let valA = cellA.getAttribute('data-value') !== null ? cellA.getAttribute('data-value') : cellA.textContent.trim();
                 let valB = cellB.getAttribute('data-value') !== null ? cellB.getAttribute('data-value') : cellB.textContent.trim();
 
@@ -494,49 +416,38 @@
                 }
             });
 
-            // Append sorted rows
             rows.forEach(row => tbody.appendChild(row));
         }
 
-        // Copy Table to Clipboard
         function copyTable() {
             const table = document.getElementById('resultsTable');
             const rows = table.querySelectorAll('tr');
-            let tsv = ''; // Tab separated values are best for Excel/Sheets pasting
+            let tsv = ''; 
 
             rows.forEach((row, i) => {
                 const cells = row.querySelectorAll('th, td');
                 const rowData = Array.from(cells).map(cell => {
-                    // Remove line breaks and extra spaces
                     let text = cell.textContent.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
                     if(text === 'Clicca per aggiungere note...') text = '';
-                    // Clean header names
                     if(i === 0) text = text.replace(' arrow-up-down', '').replace(' arrow-up', '').replace(' arrow-down', '').trim();
                     return text;
                 });
                 tsv += rowData.join('\t') + '\n';
             });
 
-            // Modern clipboard API fallback
             navigator.clipboard.writeText(tsv).then(() => {
                 showToast('Tabella copiata negli appunti!');
             }).catch(err => {
-                // Fallback for older browsers
                 const textArea = document.createElement("textarea");
                 textArea.value = tsv;
                 document.body.appendChild(textArea);
                 textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showToast('Tabella copiata negli appunti!');
-                } catch (e) {
-                    showToast('Errore nella copia.', 'error');
-                }
+                try { document.execCommand('copy'); showToast('Tabella copiata negli appunti!'); } 
+                catch (e) { showToast('Errore nella copia.', 'error'); }
                 document.body.removeChild(textArea);
             });
         }
 
-        // Download as CSV
         function downloadCSV() {
             const table = document.getElementById('resultsTable');
             const rows = table.querySelectorAll('tr');
@@ -548,8 +459,6 @@
                     let text = cell.textContent.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
                     if(text === 'Clicca per aggiungere note...') text = '';
                     if(i === 0) text = text.replace(' arrow-up-down', '').replace(' arrow-up', '').replace(' arrow-down', '').trim();
-                    
-                    // Escape quotes
                     text = text.replace(/"/g, '""');
                     return `"${text}"`;
                 });
@@ -570,43 +479,26 @@
             showToast('CSV scaricato!');
         }
 
-        // Download as Excel (XLSX) using SheetJS
         function downloadExcel() {
             if (typeof XLSX === 'undefined') {
                 showToast("Libreria Excel in caricamento, riprova...", "error");
                 return;
             }
 
-            // Clone table to modify it before export (remove icons/placeholders)
             const tableClone = document.getElementById('resultsTable').cloneNode(true);
-            
-            // Clean up headers in clone
             const headers = tableClone.querySelectorAll('th');
-            headers.forEach(th => {
-                let text = th.textContent.replace(/(\r\n|\n|\r)/gm, "").trim();
-                th.textContent = text;
-            });
-
-            // Clean up notes placeholder in clone
-            const cells = tableClone.querySelectorAll('td');
-            cells.forEach(td => {
-                if(td.textContent.trim() === 'Clicca per aggiungere note...') {
-                    td.textContent = '';
-                }
-            });
-
-            // Generate Book
-            const wb = XLSX.utils.table_to_book(tableClone, {sheet: "Analisi Domini"});
+            headers.forEach(th => { th.textContent = th.textContent.replace(/(\r\n|\n|\r)/gm, "").trim(); });
             
-            // Save file
+            const cells = tableClone.querySelectorAll('td');
+            cells.forEach(td => { if(td.textContent.trim() === 'Clicca per aggiungere note...') td.textContent = ''; });
+
+            const wb = XLSX.utils.table_to_book(tableClone, {sheet: "Analisi Domini"});
             XLSX.writeFile(wb, `Analisi_DR_Ahrefs_${new Date().toISOString().split('T')[0]}.xlsx`);
             showToast('File Excel scaricato!');
         }
 
-        // Toast Notification System
         function showToast(message, type = 'success') {
             toastMessage.textContent = message;
-            
             const icon = toast.querySelector('i');
             if(type === 'success') {
                 icon.setAttribute('data-lucide', 'check-circle');
