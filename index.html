@@ -35,13 +35,6 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        td[contenteditable="true"]:hover {
-            background-color: #f8fafc; cursor: text; outline: 1px dashed #cbd5e1;
-        }
-        td[contenteditable="true"]:focus {
-            background-color: #ffffff; outline: 2px solid #146ae8; outline-offset: -2px;
-        }
-
         .sort-icon {
             display: inline-block; width: 16px; height: 16px; vertical-align: middle; margin-left: 4px; opacity: 0.3; transition: opacity 0.2s;
         }
@@ -81,10 +74,6 @@
                     <li>
                         <strong class="text-ahrefs-blue">DR (Domain Rating):</strong> 
                         <span class="text-slate-600 block mt-0.5">Mostra la forza del profilo backlink di un sito rispetto ad altri (scala 0-100).</span>
-                    </li>
-                    <li>
-                        <strong class="text-slate-800">Altre metriche:</strong> 
-                        <span class="text-slate-600 block mt-0.5">Non fornite dall'API pubblica gratuita (mostrate come N/A).</span>
                     </li>
                 </ul>
             </div>
@@ -127,9 +116,11 @@
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-xs text-slate-500 mr-2 hidden md:inline">Celle modificabili cliccandole</span>
+                    <button onclick="copyDRColumn()" class="btn-tool flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-50 hover:text-ahrefs-blue transition-colors">
+                        <i data-lucide="clipboard-copy" class="w-4 h-4"></i> Copia solo DR
+                    </button>
                     <button onclick="copyTable()" class="btn-tool flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-50 hover:text-ahrefs-blue transition-colors">
-                        <i data-lucide="copy" class="w-4 h-4"></i> Copia
+                        <i data-lucide="copy" class="w-4 h-4"></i> Copia Tutto
                     </button>
                     <button onclick="downloadCSV()" class="btn-tool flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-50 hover:text-green-600 transition-colors">
                         <i data-lucide="file-text" class="w-4 h-4"></i> CSV
@@ -149,15 +140,6 @@
                             </th>
                             <th scope="col" class="px-6 py-3 text-left font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 select-none group" onclick="sortTable(1, 'number')">
                                 DR <i data-lucide="arrow-up-down" class="sort-icon inline"></i>
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 select-none group" onclick="sortTable(2, 'number')">
-                                Ahrefs Rank <i data-lucide="arrow-up-down" class="sort-icon inline"></i>
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 select-none group" onclick="sortTable(3, 'number')">
-                                Ref. Domains <i data-lucide="arrow-up-down" class="sort-icon inline"></i>
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 select-none group" onclick="sortTable(4, 'string')">
-                                Note Utente <i data-lucide="arrow-up-down" class="sort-icon inline"></i>
                             </th>
                         </tr>
                     </thead>
@@ -289,8 +271,6 @@
                     return {
                         domain: domain,
                         dr: actualDr,
-                        ar: 'N/A', // Ahrefs non fornisce questa metrica nell'endpoint gratuito
-                        refdomains: 'N/A', // Ahrefs non fornisce questa metrica nell'endpoint gratuito
                         isSimulated: false
                     };
                 } else {
@@ -301,8 +281,6 @@
                 return {
                     domain: domain,
                     dr: 'Err Proxy',
-                    ar: '-',
-                    refdomains: '-',
                     isSimulated: true
                 };
             }
@@ -312,10 +290,6 @@
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-slate-50 transition-colors group';
             
-            // Formattiamo le metriche gestendo correttamente i testi come 'N/A'
-            const formattedAr = typeof data.ar === 'number' ? new Intl.NumberFormat('it-IT').format(data.ar) : data.ar;
-            const formattedRef = typeof data.refdomains === 'number' ? new Intl.NumberFormat('it-IT').format(data.refdomains) : data.refdomains;
-
             let drColorClass = 'bg-slate-100 text-slate-700';
             if (typeof data.dr === 'number') {
                 if (data.dr > 75) drColorClass = 'bg-green-100 text-green-800 font-bold';
@@ -325,46 +299,16 @@
                 drColorClass = 'bg-red-100 text-red-800 font-medium';
             }
 
-            const badgeText = data.isSimulated ? `<span class="ml-2 inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-xs font-medium text-red-800 ring-1 ring-inset ring-red-600/20" contenteditable="false">Errore Proxy</span>` : '';
+            const badgeText = data.isSimulated ? `<span class="ml-2 inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-xs font-medium text-red-800 ring-1 ring-inset ring-red-600/20">Errore Proxy</span>` : '';
 
             tr.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 border-r border-slate-100" contenteditable="true">${data.domain} ${badgeText}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-slate-100 text-center" contenteditable="true" data-value="${data.dr}">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 border-r border-slate-100">${data.domain} ${badgeText}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm border-r border-slate-100 text-center" data-value="${data.dr}">
                     <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full ${drColorClass}">
                         ${data.dr}
                     </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 border-r border-slate-100 text-right" contenteditable="true" data-value="${typeof data.ar === 'number' ? data.ar : -1}">${formattedAr}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 border-r border-slate-100 text-right" contenteditable="true" data-value="${typeof data.refdomains === 'number' ? data.refdomains : -1}">${formattedRef}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400 italic" contenteditable="true">Clicca per aggiungere note...</td>
             `;
-            
-            const notesCell = tr.lastElementChild;
-            notesCell.addEventListener('focus', function() {
-                if(this.textContent.trim() === 'Clicca per aggiungere note...') {
-                    this.textContent = '';
-                    this.classList.remove('italic', 'text-slate-400');
-                    this.classList.add('text-slate-800');
-                }
-            });
-            notesCell.addEventListener('blur', function() {
-                if(this.textContent.trim() === '') {
-                    this.textContent = 'Clicca per aggiungere note...';
-                    this.classList.add('italic', 'text-slate-400');
-                    this.classList.remove('text-slate-800');
-                }
-            });
-
-            tr.querySelectorAll('td[contenteditable="true"]').forEach(cell => {
-                cell.addEventListener('input', function() {
-                    let rawVal = this.textContent.replace(/\./g, '').trim();
-                    if(!isNaN(rawVal) && rawVal !== '') {
-                        this.setAttribute('data-value', rawVal);
-                    } else {
-                        this.setAttribute('data-value', this.textContent.trim());
-                    }
-                });
-            });
 
             tableBody.appendChild(tr);
         }
@@ -419,6 +363,33 @@
             rows.forEach(row => tbody.appendChild(row));
         }
 
+        function copyDRColumn() {
+            const table = document.getElementById('resultsTable');
+            const rows = table.querySelectorAll('tbody tr');
+            let drValues = [];
+
+            rows.forEach((row) => {
+                const drCell = row.querySelectorAll('td')[1]; // L'indice 1 corrisponde alla colonna DR
+                if(drCell) {
+                    let text = drCell.textContent.replace(/(\r\n|\n|\r)/gm, " ").trim();
+                    drValues.push(text);
+                }
+            });
+
+            const tsv = drValues.join('\n');
+            navigator.clipboard.writeText(tsv).then(() => {
+                showToast('Valori DR copiati negli appunti!');
+            }).catch(err => {
+                const textArea = document.createElement("textarea");
+                textArea.value = tsv;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try { document.execCommand('copy'); showToast('Valori DR copiati negli appunti!'); } 
+                catch (e) { showToast('Errore nella copia.', 'error'); }
+                document.body.removeChild(textArea);
+            });
+        }
+
         function copyTable() {
             const table = document.getElementById('resultsTable');
             const rows = table.querySelectorAll('tr');
@@ -428,7 +399,6 @@
                 const cells = row.querySelectorAll('th, td');
                 const rowData = Array.from(cells).map(cell => {
                     let text = cell.textContent.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
-                    if(text === 'Clicca per aggiungere note...') text = '';
                     if(i === 0) text = text.replace(' arrow-up-down', '').replace(' arrow-up', '').replace(' arrow-down', '').trim();
                     return text;
                 });
@@ -457,7 +427,6 @@
                 const cells = row.querySelectorAll('th, td');
                 const rowData = Array.from(cells).map(cell => {
                     let text = cell.textContent.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
-                    if(text === 'Clicca per aggiungere note...') text = '';
                     if(i === 0) text = text.replace(' arrow-up-down', '').replace(' arrow-up', '').replace(' arrow-down', '').trim();
                     text = text.replace(/"/g, '""');
                     return `"${text}"`;
@@ -488,9 +457,6 @@
             const tableClone = document.getElementById('resultsTable').cloneNode(true);
             const headers = tableClone.querySelectorAll('th');
             headers.forEach(th => { th.textContent = th.textContent.replace(/(\r\n|\n|\r)/gm, "").trim(); });
-            
-            const cells = tableClone.querySelectorAll('td');
-            cells.forEach(td => { if(td.textContent.trim() === 'Clicca per aggiungere note...') td.textContent = ''; });
 
             const wb = XLSX.utils.table_to_book(tableClone, {sheet: "Analisi Domini"});
             XLSX.writeFile(wb, `Analisi_DR_Ahrefs_${new Date().toISOString().split('T')[0]}.xlsx`);
